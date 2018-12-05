@@ -26,30 +26,23 @@
 #include <string>
 
 using namespace std;
-
+const string ERRROR_MESSAGE = "Non valide";
 unsigned int convertRomanLetterToInt(char romanLetter) {
     switch (romanLetter) {
         case 'M':
             return 1000;
-            break;
         case 'D':
             return 500;
-            break;
-        case 'L':
-            return 50;
-            break;
         case 'C':
             return 100;
-            break;
+        case 'L':
+            return 50;
         case 'X':
             return 10;
-            break;
         case 'V':
             return 5;
-            break;
         case 'I':
             return 1;
-            break;
         default:
             return 0;
             break;
@@ -57,12 +50,47 @@ unsigned int convertRomanLetterToInt(char romanLetter) {
 }
 string convertArabicToRoman(string number) {
 }
-string convertRomanToArabic(string number) {
-    for (int i : number) {
+unsigned int convertRomanToArabic(string number) {
+    bool invalid = false;
+    unsigned int result;
+
+    for (unsigned int i = 0; i < number.length(); i++) {
+        char previous = number[i - 1];
         char current = number[i];
+        char next = number[i + 1];
+        unsigned int previousNumber = i == 0 ? 0 : convertRomanLetterToInt(previous);
         unsigned int currentNumber = convertRomanLetterToInt(current);
+        unsigned int nextNumber = i == number.length() - 1 ? 0 : convertRomanLetterToInt(next);
+        result += (!previousNumber) ? currentNumber : 0;
+
+        if (nextNumber != 0) {
+            if (currentNumber > nextNumber) {
+                result += nextNumber;
+
+            } else if (((current == 'X' || current == 'C' || current == 'X') && currentNumber < nextNumber) &&
+                       currentNumber != previousNumber && currentNumber * 10 < nextNumber) {
+                result += nextNumber - currentNumber;
+            } else {
+                cout << "Non valide";
+                invalid = true;
+                break;
+            }
+        }
+    }
+    return (invalid ? 0 : result);
+}
+string displayResult(unsigned int result) {
+    if (result != 0) {
+        cout << result;
+    } else {
+        return "";
     }
 }
 int main() {
+    // Invalide
+    displayResult(convertRomanToArabic("LDXVI"));
+    // Valide
+    displayResult(convertRomanToArabic("DLXVI"));
+
     return 0;
 }

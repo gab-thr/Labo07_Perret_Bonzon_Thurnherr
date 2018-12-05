@@ -27,8 +27,42 @@
 
 using namespace std;
 
+unsigned int convertRomanLetterToInt(char romanLetter) {
+    switch (romanLetter) {
+        case 'M':
+            return 1000;
+            break;
+        case 'D':
+            return 500;
+            break;
+        case 'L':
+            return 50;
+            break;
+        case 'C':
+            return 100;
+            break;
+        case 'X':
+            return 10;
+            break;
+        case 'V':
+            return 5;
+            break;
+        case 'I':
+            return 1;
+            break;
+        default:
+            return 0;
+            break;
+    }
+}
+string convertArabicToRoman(string number) {
+}
+string convertRomanToArabic(string number) {
+    for (int i : number) {
+        char current = number[i];
+        unsigned int currentNumber = convertRomanLetterToInt(current);
+    }
+}
 int main() {
-  
-
     return 0;
 }

@@ -50,9 +50,19 @@ unsigned int convertRomanLetterToInt(char romanLetter) {
 }
 string convertArabicToRoman(string number) {
 }
+bool isPower(int powerOf, long int number) {
+    if (powerOf == 1)
+        return (number == 1);
+
+    long int result = 1;
+    while (result < number) {
+        result *= powerOf;
+    }
+    return (result == number);
+}
 unsigned int convertRomanToArabic(string number) {
     bool invalid = false;
-    unsigned int result;
+    unsigned int result = 0;
 
     for (unsigned int i = 0; i < number.length(); i++) {
         char previous = number[i - 1];
@@ -61,15 +71,13 @@ unsigned int convertRomanToArabic(string number) {
         unsigned int previousNumber = i == 0 ? 0 : convertRomanLetterToInt(previous);
         unsigned int currentNumber = convertRomanLetterToInt(current);
         unsigned int nextNumber = i == number.length() - 1 ? 0 : convertRomanLetterToInt(next);
-        result += (!previousNumber) ? currentNumber : 0;
 
         if (nextNumber != 0) {
-            if (currentNumber > nextNumber) {
-                result += nextNumber;
-
-            } else if (((current == 'X' || current == 'C' || current == 'X') && currentNumber < nextNumber) &&
-                       currentNumber != previousNumber && currentNumber * 10 < nextNumber) {
+            if (((current == 'I' || current == 'X' || current == 'C') && currentNumber < nextNumber) &&
+                currentNumber != previousNumber && (currentNumber * 10 != nextNumber && (!isPower(10, currentNumber) || !isPower(10, nextNumber)))) {
                 result += nextNumber - currentNumber;
+            } else if (currentNumber > nextNumber) {
+                result += previousNumber == 0 ? currentNumber + nextNumber : nextNumber;
             } else {
                 cout << "Non valide";
                 invalid = true;
@@ -88,7 +96,12 @@ string displayResult(unsigned int result) {
 }
 int main() {
     // Invalide
-    displayResult(convertRomanToArabic("LDXVI"));
+    // displayResult(convertRomanToArabic("LDXVI"));
+    // displayResult(convertRomanToArabic("MIM"));
+    // displayResult(convertRomanToArabic("VL"));
+    // displayResult(convertRomanToArabic("IIX"));
+    // displayResult(convertRomanToArabic("MCMC"));
+
     // Valide
     displayResult(convertRomanToArabic("DLXVI"));
 

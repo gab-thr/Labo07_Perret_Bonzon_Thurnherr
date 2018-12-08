@@ -109,43 +109,61 @@ unsigned int convertArabicToRoman(string number) {
     return 0;
 }
 
-unsigned int convertRomanToArabic(string number) {
+/*
+ @brief Function who convert Roman letters to indo-arabic numeral system
+ @param[in] string romanNumber String of letters supposedly roman
+ @return unsigned int Roman letter number converted into indo-arabic numeral system
+ */
+unsigned int convertRomanToArabic(string romanNumber) {
     bool invalid = false;
     unsigned int result = 0;
 
-    for (unsigned int i = 0; i < number.length(); i++) {
-        char previous = number[i - 1];
-        char current = number[i];
-        char next = number[i + 1];
-        char afterNext = number[i + 2];
+    for (unsigned int i = 0; i < romanNumber.length(); i++) {
+        char previous = romanNumber[i - 1];
+        char current = romanNumber[i];
+        char next = romanNumber[i + 1];
+        char afterNext = romanNumber[i + 2];
+        unsigned int resultSub = 0;
+        unsigned int resultAdd = 0;
 
         unsigned int previousNumber = i == 0 ? 0 : convertRomanLetterToInt(previous);
-        unsigned int currentNumber = convertRomanLetterToInt(current);
-        unsigned int nextNumber = i == number.length() - 1 ? 0 : convertRomanLetterToInt(next);
-        unsigned int afterNextNumber = i == number.length() - 1 ? 0 : convertRomanLetterToInt(afterNext);
-        unsigned int temp = 0;
-
+        unsigned int currentNumber = i == romanNumber.length() - 1 ? 0 : convertRomanLetterToInt(current);
+        unsigned int nextNumber = i == romanNumber.length() - 1 ? 0 : convertRomanLetterToInt(next);
+        unsigned int afterNextNumber = i == romanNumber.length() - 1 ? 0 : convertRomanLetterToInt(afterNext);
+        unsigned int carry = 0;
+        // if we're not at the end of the string
         if (nextNumber != 0) {
-            if (currentNumber > nextNumber && nextNumber >= afterNextNumber) {
-                result += previousNumber == 0 ? currentNumber + nextNumber : nextNumber;
-            } else if (nextNumber < afterNextNumber) {
-                temp = currentNumber;
-
+            // If the next numbers are in descending order, we'll add them
+            if (currentNumber >= nextNumber) {
+                // If no substraction are awaiting
+                if (nextNumber >= afterNextNumber) {
+                    resultAdd += (previousNumber == 0) ? currentNumber + nextNumber : nextNumber;
+                    // IF a substraction follows next
+                } else if (previousNumber > currentNumber || previousNumber == 0) {
+                    carry += currentNumber;
+                }
+                // if the next numbers are in ascending order, we'll substract them
             } else if (((current == 'I' || current == 'X' || current == 'C') && currentNumber < nextNumber) &&
                        currentNumber != previousNumber && (!isPower(10, currentNumber) || !isPower(10, nextNumber) || currentNumber * 10 == nextNumber)) {
-                result += nextNumber - currentNumber;
+                resultSub += nextNumber - currentNumber;
+
             } else {
                 invalid = true;
                 break;
             }
-            result += temp;
+            result += resultSub + resultAdd + carry;
+            // if there is only one letter, we don't have to process the above
+            //  An we can simply call the function for converting letter
+        } else if (romanNumber.length() == 1) {
+            result += convertRomanLetterToInt(current);
         }
     }
     /*
     if (convertArabicToRoman(number) == result) {
         invalid = false;
+    // If the result of the algorithm doesn't match the way we would 
+    write it in indo-arabic number, it's invalid
     } else {
-        cout << "Non valide";
         invalid = true;
     }
     */
@@ -195,6 +213,7 @@ int main() {
                 break;
             if (!inputError)
                 displayIntResult(convertRomanToArabic(romanNumber));
+
         }
 
         // Is an arabic number

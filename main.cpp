@@ -105,8 +105,76 @@ bool isPower(int powerOf, long int number) {
     return (result == number);
 }
 
-unsigned int convertArabicToRoman(string number) {
-    return 0;
+string convertArabicToRoman(string value) { 
+    int tenthPower = value.length(); 
+    stringstream SSstring(value); 
+    int number = 0; 
+    SSstring >> number;
+
+    string result;
+    int tenthPowerLoop = tenthPower-1;
+ 
+    char current = 'M';
+    char middle = 'D';
+    char smaller = 'C';
+
+    for(int i = 0; i <= tenthPowerLoop; ++i) {
+
+    // Thousand
+    if(tenthPower == 4 && value[i] != 0) {
+        current = 'e';
+        middle = 'e';
+        smaller = 'M';
+    }
+
+    // Hundreds
+    if(tenthPower == 3 && value[i] != 0) {
+        current = 'M';
+        middle = 'D';
+        smaller = 'C';
+    }
+
+    // Dozens
+    if(tenthPower == 2 && value[i] != 0) {
+        current = 'C';
+        middle = 'L';
+        smaller = 'X';
+    }
+
+    // Units
+    if(tenthPower == 1 && value[i] != 0) {
+        current = 'X';
+        middle = 'V';
+        smaller = 'I';
+    }
+
+    if(value[i]-'0' >= 5 && value[i]-'0' <= 8) {
+       result += middle;
+    }
+    if(value[i]-'0' == 4) {
+        if(tenthPower == 4) {
+            result = result + smaller + smaller + smaller + smaller;
+        } else { 
+            result = result + smaller + middle;
+        }
+    }
+    if(value[i]-'0' == 9) {
+        result = result + smaller + current;
+    }
+
+    if(value[i]-'0' > 0 && value[i]-'0' < 4 || value[i]-'0' > 5 && value[i]-'0' < 9) {
+        if(value[i]-'0' > 5 && value[i]-'0' < 9) {
+            value[i] -= 5;
+        }
+        for(int j = 0; j < (value[i]-'0'); ++j) {
+            result += smaller;
+            }
+        }
+        tenthPower--; 
+    }
+
+    //cout << "result "<< result << endl;
+    return result;
 }
 
 /*
@@ -114,7 +182,7 @@ unsigned int convertArabicToRoman(string number) {
  @param[in] string romanNumber String of letters supposedly roman
  @return unsigned int Roman letter number converted into indo-arabic numeral system
  */
-unsigned int convertRomanToArabic(string romanNumber) {
+string convertRomanToArabic(string romanNumber) {
     bool invalid = false;
     unsigned int result = 0;
 
@@ -158,16 +226,16 @@ unsigned int convertRomanToArabic(string romanNumber) {
             result += convertRomanLetterToInt(current);
         }
     }
-    /*
-    if (convertArabicToRoman(number) == result) {
+    
+    if (convertArabicToRoman(to_string(result)) == romanNumber) {
         invalid = false;
     // If the result of the algorithm doesn't match the way we would 
-    write it in indo-arabic number, it's invalid
+    //write it in indo-arabic number, it's invalid
     } else {
         invalid = true;
     }
-    */
-    return (invalid ? 0 : result);
+    
+    return (invalid ? 0 : to_string(result));
 }
 
 /**
@@ -181,6 +249,14 @@ void displayIntResult(unsigned int result) {
         cout << result << endl;
     } else {
         cout << ERROR_MESSAGE << endl;
+    }
+}
+
+void displayStrResult(string result) {
+    if (result.empty()) {
+        cout << ERROR_MESSAGE << endl;
+    } else {
+        cout << result << endl;
     }
 }
 
@@ -207,12 +283,12 @@ int main() {
             romanNumber = SSuserInput.str();
             strToUpper(romanNumber);
 
-            if (romanNumber.length() > 10 || !areRomanLetters(romanNumber))
+            if (romanNumber.length() > 12 || !areRomanLetters(romanNumber))
                 inputError = true;
             if (romanNumber.empty())
                 break;
             if (!inputError)
-                displayIntResult(convertRomanToArabic(romanNumber));
+                displayStrResult(convertRomanToArabic(romanNumber));
 
         }
 
@@ -226,6 +302,7 @@ int main() {
             if (!inputError) {
                 string strArabicNumber = to_string(arabicNumber);
                 convertArabicToRoman(strArabicNumber);
+                 displayStrResult(convertArabicToRoman(strArabicNumber));
             }
         }
 

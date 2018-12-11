@@ -199,14 +199,17 @@ string convertRomanToArabic(string romanNumber) {
     unsigned int previousNumber = 0, currentNumber = 0, nextNumber = 0, afterNextNumber = 0;
 
     for (unsigned int i = 0; i < romanNumber.length(); i++) {
+        // if we're not apart from the string
         if (((i + 1) < romanNumber.length() || (i + 2) < romanNumber.length()) || i < romanNumber.length()) {
             current = romanNumber[i];
             next = romanNumber[i + 1];
             afterNext = romanNumber[i + 2];
-        }
+        }        // else we week the variables in a neutral state (0)
+
         if (i != 0) {
             previous = romanNumber[i - 1];
         }
+        // if previous variables are not equal to 0
         if (previous || current || next || afterNext) {
             previousNumber = convertRomanLetterToInt(previous);
             currentNumber = convertRomanLetterToInt(current);

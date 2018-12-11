@@ -16,7 +16,6 @@
     respectant pas cette règle doivent être considérés non valides.
     Remarque(s) : - Le programme gère l'insertion de chiffres romains en minuscule
                     et en majuscule
-                  -
     Compilateur : MinGW-g++ <6.3.0>
     -----------------------------------------------------------------------------------
 */
@@ -28,9 +27,12 @@
 
 using namespace std;
 
+
 const string ERROR_MESSAGE = "Non valide";
-const char ZERO = '0';
+
 const int INT_TEN = 10;
+
+const char ZERO = '0';
 const char THOUSAND = 'M';
 const char FIVE_HUNDRED = 'D';
 const char HUNDRED = 'C';
@@ -39,6 +41,67 @@ const char TEN = 'X';
 const char FIVE = 'V';
 const char ONE = 'I';
 const char OUT_OF_RANGE = 'e';
+
+void strToUpper(string& string);
+unsigned int convertRomanLetterToInt(char romanLetter);
+bool areRomanLetters(const string& romanNumber);
+bool isPowerOfTen(long int number);
+string convertArabicToRoman(string value);
+string convertRomanToArabic(string romanNumber);
+void displayStrResult(string result);
+
+int main() {
+    string rawUserInput;
+    stringstream SSuserInput("");
+    int arabicNumber = 0;
+    string romanNumber = "";
+    bool inputError = false;
+
+    do {
+        // Totally clear the variables for the next use
+        SSuserInput.clear();
+        SSuserInput.str("");
+        arabicNumber = 0;
+        romanNumber = "";
+        inputError = false;
+
+        getline(cin, rawUserInput);
+        SSuserInput.str(rawUserInput);
+
+        // Is a roman number
+        if (!(SSuserInput >> arabicNumber)) {
+            romanNumber = SSuserInput.str();
+            strToUpper(romanNumber);
+
+            if (!areRomanLetters(romanNumber))
+                inputError = true;
+            if (romanNumber.empty())
+                break;
+            if (!inputError)
+                displayStrResult(convertRomanToArabic(romanNumber));
+        }
+
+        // Is an arabic number
+        else {
+            // If there's someting we don't want after the numbers (-> input error)
+            unsigned short intPartSize = (unsigned short)(log10(arabicNumber) + 1);
+            if (rawUserInput.length() > intPartSize)
+                inputError = true;
+
+            if (!inputError) {
+                string strArabicNumber = to_string(arabicNumber);
+                displayStrResult(convertArabicToRoman(strArabicNumber));
+            }
+        }
+
+        if (inputError) {
+            cout << ERROR_MESSAGE << endl;
+            continue;
+        }
+    } while (!rawUserInput.empty());
+
+    return 0;
+}
 
 /**
  @brief Function that puts every character of a string to uppercase
@@ -267,57 +330,4 @@ void displayStrResult(string result) {
     } else {
         cout << result << endl;
     }
-}
-
-int main() {
-    string rawUserInput;
-    stringstream SSuserInput("");
-    int arabicNumber = 0;
-    string romanNumber = "";
-    bool inputError = false;
-
-    do {
-        // Totally clear the variables for the next use
-        SSuserInput.clear();
-        SSuserInput.str("");
-        arabicNumber = 0;
-        romanNumber = "";
-        inputError = false;
-
-        getline(cin, rawUserInput);
-        SSuserInput.str(rawUserInput);
-
-        // Is a roman number
-        if (!(SSuserInput >> arabicNumber)) {
-            romanNumber = SSuserInput.str();
-            strToUpper(romanNumber);
-
-            if (!areRomanLetters(romanNumber))
-                inputError = true;
-            if (romanNumber.empty())
-                break;
-            if (!inputError)
-                displayStrResult(convertRomanToArabic(romanNumber));
-        }
-
-        // Is an arabic number
-        else {
-            // If there's someting we don't want after the numbers (-> input error)
-            unsigned short intPartSize = (unsigned short)(log10(arabicNumber) + 1);
-            if (rawUserInput.length() > intPartSize)
-                inputError = true;
-
-            if (!inputError) {
-                string strArabicNumber = to_string(arabicNumber);
-                displayStrResult(convertArabicToRoman(strArabicNumber));
-            }
-        }
-
-        if (inputError) {
-            cout << ERROR_MESSAGE << endl;
-            continue;
-        }
-    } while (!rawUserInput.empty());
-
-    return 0;
 }

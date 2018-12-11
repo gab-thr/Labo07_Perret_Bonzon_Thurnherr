@@ -32,6 +32,7 @@
 using namespace std;
 
 const string ERROR_MESSAGE = "Non valide";
+const char ZERO = '0';
 
 /**
  @brief Function that puts every character of a string to uppercase
@@ -133,52 +134,50 @@ string convertArabicToRoman(string value) {
 
     // going through every digit to assign the correct roman letters and construct the roman numeral
     for (int i = 0; i <= tenthPower; ++i) {
-        // Thousands
-        if (digitsNumber == 4 && value.at(i) != 0) {
-            current = 'e';
-            middle = 'e';
-            smaller = 'M';
+        switch (digitsNumber) {
+            case 4:
+                current = 'e';
+                middle = 'e';
+                smaller = 'M';
+                break;
+            case 3:
+                current = 'M';
+                middle = 'D';
+                smaller = 'C';
+                break;
+            case 2:
+                current = 'C';
+                middle = 'L';
+                smaller = 'X';
+                break;
+            case 1:
+                current = 'X';
+                middle = 'V';
+                smaller = 'I';
+                break;
+            case 0:
+            default:
+                break;
         }
 
-        // Hundreds
-        if (digitsNumber == 3 && value.at(i) != 0) {
-            current = 'M';
-            middle = 'D';
-            smaller = 'C';
-        }
-
-        // Dozens
-        if (digitsNumber == 2 && value.at(i) != 0) {
-            current = 'C';
-            middle = 'L';
-            smaller = 'X';
-        }
-
-        // Units
-        if (digitsNumber == 1 && value.at(i) != 0) {
-            current = 'X';
-            middle = 'V';
-            smaller = 'I';
-        }
-
-        if (value.at(i) - '0' >= 5 && value.at(i) - '0' <= 8) {
+        if (value.at(i) - ZERO >= 5 && value.at(i) - ZERO <= 8) {
             result += middle;
         }
-        if (value.at(i) - '0' == 4) {
+        if (value.at(i) - ZERO == 4) {
             if (digitsNumber == 4) {
                 result = result + smaller + smaller + smaller + smaller;
             } else {
                 result = result + smaller + middle;
             }
         }
-        if (value.at(i) - '0' == 9) {
+        if (value.at(i) - ZERO == 9) {
             result = result + smaller + current;
         }
-        if (((value.at(i) - '0' > 0) && (value.at(i) - '0' < 4)) || ((value.at(i) - '0' > 5) && (value.at(i) - '0' < 9))) {
-            if ((value.at(i) - '0' > 5) && (value.at(i) - '0' < 9)) 
-               value.at(i) = (char)(value.at(i) - 5);
+        if (((value.at(i) - ZERO > 0) && (value.at(i) - ZERO < 4)) || ((value.at(i) - ZERO > 5) && (value.at(i) - ZERO < 9))) {
+            if ((value.at(i) - ZERO > 5) && (value.at(i) - ZERO < 9))
+                value.at(i) = (char)(value.at(i) - 5);
 
-            for (int j = 0; j < (value.at(i) - '0'); ++j) {
+            for (int j = 0; j < (value.at(i) - ZERO); ++j) {
                 result += smaller;
             }
         }

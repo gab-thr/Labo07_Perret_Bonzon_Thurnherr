@@ -31,6 +31,14 @@ using namespace std;
 const string ERROR_MESSAGE = "Non valide";
 const char ZERO = '0';
 
+const char THOUSAND = 'M';
+const char FIVE_HUNDRED = 'D';
+const char HUNDRED = 'C';
+const char FIFTY = 'L';
+const char TEN = 'X';
+const char FIVE = 'V';
+const char ONE = 'I';
+
 /**
  @brief Function that puts every character of a string to uppercase
  @param[in,out] string& string  String to convert to uppercase

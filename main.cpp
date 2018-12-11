@@ -16,7 +16,9 @@
     s'écrit IV et pas IIII, 99 s'écrit XCIX et pas LXXXXVIIII. Les nombres romains ne
     respectant pas cette règle doivent être considérés non valides.
 
-    Remarque(s) :
+    Remarque(s) : - Le programme gère l'insertion de chiffres romains en minuscule
+                    et en majuscule
+                  - 
 
     Compilateur : MinGW-g++ <6.3.0>
     -----------------------------------------------------------------------------------
@@ -30,14 +32,15 @@
 using namespace std;
 
 const string ERROR_MESSAGE = "Non valide";
-/**
- @brief Function that puts every character of a sting to uppercase
 
- @param[in,out]     string& string String to convert to uppercase
+/**
+ @brief Function that puts every character of a string to uppercase
+
+ @param[in,out] string& string  String to convert to uppercase
  */
 void strToUpper(string& string) {
     for (size_t i = 0; i < string.length(); ++i) {
-        string[i] = toupper(string[i]);
+        string[i] = (char)toupper(string[i]);
     }
 }
 
@@ -47,7 +50,6 @@ void strToUpper(string& string) {
  @param[in] char romanLetter    Letter of the roman numeration system
  @return unsigned int           Value in arabic numbers
  */
-
 unsigned int convertRomanLetterToInt(char romanLetter) {
     switch (romanLetter) {
         case 'M':
@@ -94,6 +96,13 @@ bool areRomanLetters(const string& romanNumber) {
     }
 }
 
+/*
+ @brief
+
+ @param[in] int powerOf
+ @param[in] long int number
+ @return bool
+ */
 bool isPower(int powerOf, long int number) {
     if (powerOf == 1)
         return (number == 1);
@@ -105,108 +114,111 @@ bool isPower(int powerOf, long int number) {
     return (result == number);
 }
 
-string convertArabicToRoman(string value) { 
-    int tenthPower = value.length(); 
-    stringstream SSstring(value); 
-    int number = 0; 
-    SSstring >> number;
+/*
+ @brief Function that converts indo-arabic numerals to Roman letters
 
+ @param[in] string value    String of numbers to convert
+ @return string result      Indo-arabic numeral converted to Roman letters
+ */
+string convertArabicToRoman(string value) {
     string result;
-    int tenthPowerLoop = tenthPower-1;
- 
+
+    int digitsNumber = value.length();  // number of digits of the number
+    int tenthPower = digitsNumber - 1;  // max tenth power of the number
+
+    // setting variables for the current digit number to create the roman numeral
     char current = 'M';
     char middle = 'D';
     char smaller = 'C';
 
-    for(int i = 0; i <= tenthPowerLoop; ++i) {
-
-    // Thousand
-    if(tenthPower == 4 && value[i] != 0) {
-        current = 'e';
-        middle = 'e';
-        smaller = 'M';
-    }
-
-    // Hundreds
-    if(tenthPower == 3 && value[i] != 0) {
-        current = 'M';
-        middle = 'D';
-        smaller = 'C';
-    }
-
-    // Dozens
-    if(tenthPower == 2 && value[i] != 0) {
-        current = 'C';
-        middle = 'L';
-        smaller = 'X';
-    }
-
-    // Units
-    if(tenthPower == 1 && value[i] != 0) {
-        current = 'X';
-        middle = 'V';
-        smaller = 'I';
-    }
-
-    if(value[i]-'0' >= 5 && value[i]-'0' <= 8) {
-       result += middle;
-    }
-    if(value[i]-'0' == 4) {
-        if(tenthPower == 4) {
-            result = result + smaller + smaller + smaller + smaller;
-        } else { 
-            result = result + smaller + middle;
+    // going through every digit to assign the correct roman letters and construct the roman numeral
+    for (int i = 0; i <= tenthPower; ++i) {
+        // Thousands
+        if (digitsNumber == 4 && value.at(i) != 0) {
+            current = 'e';
+            middle = 'e';
+            smaller = 'M';
         }
-    }
-    if(value[i]-'0' == 9) {
-        result = result + smaller + current;
-    }
 
-    if(value[i]-'0' > 0 && value[i]-'0' < 4 || value[i]-'0' > 5 && value[i]-'0' < 9) {
-        if(value[i]-'0' > 5 && value[i]-'0' < 9) {
-            value[i] -= 5;
+        // Hundreds
+        if (digitsNumber == 3 && value.at(i) != 0) {
+            current = 'M';
+            middle = 'D';
+            smaller = 'C';
         }
-        for(int j = 0; j < (value[i]-'0'); ++j) {
-            result += smaller;
+
+        // Dozens
+        if (digitsNumber == 2 && value.at(i) != 0) {
+            current = 'C';
+            middle = 'L';
+            smaller = 'X';
+        }
+
+        // Units
+        if (digitsNumber == 1 && value.at(i) != 0) {
+            current = 'X';
+            middle = 'V';
+            smaller = 'I';
+        }
+
+        if (value.at(i) - '0' >= 5 && value.at(i) - '0' <= 8) {
+            result += middle;
+        }
+        if (value.at(i) - '0' == 4) {
+            if (digitsNumber == 4) {
+                result = result + smaller + smaller + smaller + smaller;
+            } else {
+                result = result + smaller + middle;
             }
         }
-        tenthPower--; 
-    }
+        if (value.at(i) - '0' == 9) {
+            result = result + smaller + current;
+        }
+        if (((value.at(i) - '0' > 0) && (value.at(i) - '0' < 4)) || ((value.at(i) - '0' > 5) && (value.at(i) - '0' < 9))) {
+            if ((value.at(i) - '0' > 5) && (value.at(i) - '0' < 9)) 
+               value.at(i) = (char)(value.at(i) - 5);
 
-    //cout << "result "<< result << endl;
+            for (int j = 0; j < (value.at(i) - '0'); ++j) {
+                result += smaller;
+            }
+        }
+        digitsNumber--;
+    }
     return result;
 }
 
 /*
- @brief Function who convert Roman letters to indo-arabic numeral system
- @param[in] string romanNumber String of letters supposedly roman
- @return unsigned int Roman letter number converted into indo-arabic numeral system
+ @brief Function that converts Roman letters to indo-arabic numeral system
+
+ @param[in] string romanNumber  String of letters supposedly roman
+ @return unsigned int           Roman letter number converted into indo-arabic numeral system
  */
 string convertRomanToArabic(string romanNumber) {
     bool invalid = false;
     unsigned int result = 0;
 
     for (unsigned int i = 0; i < romanNumber.length(); i++) {
-        char previous =  i == 0 ? 0 : romanNumber[i - 1];
-        char current =  i == romanNumber.length() - 1 ? 0 : romanNumber[i];
-        char next =  i == romanNumber.length() - 1 ? 0 : romanNumber[i + 1];
-        char afterNext =  i == romanNumber.length() - 1 ? 0 : romanNumber[i + 2];
+        char previous = i == 0 ? 0 : romanNumber[i - 1];
+        char current = i == romanNumber.length() - 1 ? 0 : romanNumber[i];
+        char next = i == romanNumber.length() - 1 ? 0 : romanNumber[i + 1];
+        char afterNext = i == romanNumber.length() - 1 ? 0 : romanNumber[i + 2];
         unsigned int resultSub = 0;
         unsigned int resultAdd = 0;
 
         unsigned int previousNumber = previous == 0 ? 0 : convertRomanLetterToInt(previous);
-        unsigned int currentNumber =  current == 0 ? 0 : convertRomanLetterToInt(current);
+        unsigned int currentNumber = current == 0 ? 0 : convertRomanLetterToInt(current);
         unsigned int nextNumber = next == 0 ? 0 : convertRomanLetterToInt(next);
         unsigned int afterNextNumber = afterNext == 0 ? 0 : convertRomanLetterToInt(afterNext);
         unsigned int carry = 0;
+
         // if we're not at the end of the string
         if (nextNumber != 0) {
-            // If the next numbers are in descending order, we'll add them
+            // if the next numbers are in descending order, we'll add them
             if (currentNumber >= nextNumber) {
-                // If no substraction are awaiting
+                // if no substraction are awaiting
                 if (nextNumber >= afterNextNumber) {
                     resultAdd += (previousNumber == 0) ? currentNumber + nextNumber : nextNumber;
-                    // IF a substraction follows next
+                    // if a substraction follows next
                 } else if (previousNumber > currentNumber || previousNumber == 0) {
                     carry += currentNumber;
                 }
@@ -221,37 +233,28 @@ string convertRomanToArabic(string romanNumber) {
             }
             result += resultSub + resultAdd + carry;
             // if there is only one letter, we don't have to process the above
-            //  An we can simply call the function for converting letter
+            // and we can simply call the function for converting letter
         } else if (romanNumber.length() == 1) {
             result += convertRomanLetterToInt(current);
         }
     }
-    
+
     if (convertArabicToRoman(to_string(result)) == romanNumber) {
         invalid = false;
-    // If the result of the algorithm doesn't match the way we would 
-    //write it in indo-arabic number, it's invalid
+        // If the result of the algorithm doesn't match the way we would
+        // write it in indo-arabic, it's invalid
     } else {
         invalid = true;
     }
-    
+
     return (invalid ? "" : to_string(result));
 }
 
 /**
  @brief Function displaying the result of a conversion
 
- @param[in] unsigned int result     Value in arabic numbers
- @return string                     Empty value if the arabic number is null
+ @param[in] string result   Value to display (either Roman or arabic numeral)
  */
-void displayIntResult(unsigned int result) {
-    if (result != 0) {
-        cout << result << endl;
-    } else {
-        cout << ERROR_MESSAGE << endl;
-    }
-}
-
 void displayStrResult(string result) {
     if (result.empty()) {
         cout << ERROR_MESSAGE << endl;
@@ -283,26 +286,24 @@ int main() {
             romanNumber = SSuserInput.str();
             strToUpper(romanNumber);
 
-            if (romanNumber.length() > 12 || !areRomanLetters(romanNumber))
+            if (!areRomanLetters(romanNumber))
                 inputError = true;
             if (romanNumber.empty())
                 break;
             if (!inputError)
                 displayStrResult(convertRomanToArabic(romanNumber));
-
         }
 
         // Is an arabic number
         else {
             // If there's someting we don't want after the numbers (-> input error)
-            unsigned short intPartSize = log10(arabicNumber) + 1;
+            unsigned short intPartSize = (unsigned short)(log10(arabicNumber) + 1);
             if (rawUserInput.length() > intPartSize)
                 inputError = true;
 
             if (!inputError) {
                 string strArabicNumber = to_string(arabicNumber);
-                convertArabicToRoman(strArabicNumber);
-                 displayStrResult(convertArabicToRoman(strArabicNumber));
+                displayStrResult(convertArabicToRoman(strArabicNumber));
             }
         }
 

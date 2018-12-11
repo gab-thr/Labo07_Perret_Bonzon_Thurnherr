@@ -129,9 +129,9 @@ string convertArabicToRoman(string value) {
     int tenthPower = digitsNumber - 1;  // max tenth power of the number
 
     // setting variables for the current digit number to create the roman numeral
-    char current = 'M';
-    char middle = 'D';
-    char smaller = 'C';
+    char current = THOUSAND;
+    char middle = FIVE_HUNDRED;
+    char smaller = HUNDRED;
 
     // going through every digit to assign the correct roman letters and construct the roman numeral
     for (int i = 0; i <= tenthPower; ++i) {
@@ -139,22 +139,22 @@ string convertArabicToRoman(string value) {
             case 4:
                 current = 'e';
                 middle = 'e';
-                smaller = 'M';
+                smaller = THOUSAND;
                 break;
             case 3:
-                current = 'M';
-                middle = 'D';
-                smaller = 'C';
+                current = THOUSAND;
+                middle = FIVE_HUNDRED;
+                smaller = HUNDRED;
                 break;
             case 2:
-                current = 'C';
-                middle = 'L';
-                smaller = 'X';
+                current = HUNDRED;
+                middle = FIFTY;
+                smaller = TEN;
                 break;
             case 1:
-                current = 'X';
-                middle = 'V';
-                smaller = 'I';
+                current = TEN;
+                middle = FIVE;
+                smaller = ONE;
                 break;
             case 0:
             default:

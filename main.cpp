@@ -187,17 +187,17 @@ string convertRomanToArabic(string romanNumber) {
     unsigned int result = 0;
 
     for (unsigned int i = 0; i < romanNumber.length(); i++) {
-        char previous = romanNumber[i - 1];
-        char current = romanNumber[i];
-        char next = romanNumber[i + 1];
-        char afterNext = romanNumber[i + 2];
+        char previous =  i == 0 ? 0 : romanNumber[i - 1];
+        char current =  i == romanNumber.length() - 1 ? 0 : romanNumber[i];
+        char next =  i == romanNumber.length() - 1 ? 0 : romanNumber[i + 1];
+        char afterNext =  i == romanNumber.length() - 1 ? 0 : romanNumber[i + 2];
         unsigned int resultSub = 0;
         unsigned int resultAdd = 0;
 
-        unsigned int previousNumber = i == 0 ? 0 : convertRomanLetterToInt(previous);
-        unsigned int currentNumber = i == romanNumber.length() - 1 ? 0 : convertRomanLetterToInt(current);
-        unsigned int nextNumber = i == romanNumber.length() - 1 ? 0 : convertRomanLetterToInt(next);
-        unsigned int afterNextNumber = i == romanNumber.length() - 1 ? 0 : convertRomanLetterToInt(afterNext);
+        unsigned int previousNumber = previous == 0 ? 0 : convertRomanLetterToInt(previous);
+        unsigned int currentNumber =  current == 0 ? 0 : convertRomanLetterToInt(current);
+        unsigned int nextNumber = next == 0 ? 0 : convertRomanLetterToInt(next);
+        unsigned int afterNextNumber = afterNext == 0 ? 0 : convertRomanLetterToInt(afterNext);
         unsigned int carry = 0;
         // if we're not at the end of the string
         if (nextNumber != 0) {
@@ -235,7 +235,7 @@ string convertRomanToArabic(string romanNumber) {
         invalid = true;
     }
     
-    return (invalid ? 0 : to_string(result));
+    return (invalid ? "" : to_string(result));
 }
 
 /**

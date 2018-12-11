@@ -147,21 +147,16 @@ unsigned int convertRomanLetterToInt(char romanLetter) {
  @return bool areRomanLetters           Boolean returning true if every character in the string are roman letters
  */
 bool areRomanLetters(const string& romanNumber) {
-    bool areRomanLetters = true;
+    bool areRomanLetters = false;
     for (size_t i = 0; i < romanNumber.length(); ++i) {
         if (convertRomanLetterToInt(romanNumber[i])) {
             areRomanLetters = true;
         } else {
-            areRomanLetters = false;
-            break;
+          return false;
         }
     }
-
-    if (areRomanLetters) {
-        return true;
-    } else {
-        return false;
-    }
+    if(areRomanLetters)
+      return true;
 }
 
 /*

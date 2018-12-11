@@ -198,10 +198,10 @@ string convertRomanToArabic(string romanNumber) {
     unsigned int result = 0;
 
     for (unsigned int i = 0; i < romanNumber.length(); i++) {
-        char previous = i == 0 ? 0 : romanNumber[i - 1];
-        char current = i == romanNumber.length() - 1 ? 0 : romanNumber[i];
-        char next = i == romanNumber.length() - 1 ? 0 : romanNumber[i + 1];
-        char afterNext = i == romanNumber.length() - 1 ? 0 : romanNumber[i + 2];
+        char previous =  i == 0 ? 0 : romanNumber[i - 1];
+        char current =  i == romanNumber.length() - 1 && i != 0 ? 0 : romanNumber[i];
+        char next =  i == romanNumber.length() - 1 ? 0 : romanNumber[i + 1];
+        char afterNext =  i == romanNumber.length() - 1 ? 0 : romanNumber[i + 2];
         unsigned int resultSub = 0;
         unsigned int resultAdd = 0;
 

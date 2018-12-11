@@ -30,7 +30,7 @@ using namespace std;
 
 const string ERROR_MESSAGE = "Non valide";
 const char ZERO = '0';
-
+const int INT_TEN = 10;
 const char THOUSAND = 'M';
 const char FIVE_HUNDRED = 'D';
 const char HUNDRED = 'C';
@@ -38,6 +38,7 @@ const char FIFTY = 'L';
 const char TEN = 'X';
 const char FIVE = 'V';
 const char ONE = 'I';
+const char OUT_OF_RANGE = 'e';
 
 /**
  @brief Function that puts every character of a string to uppercase
@@ -56,19 +57,19 @@ void strToUpper(string& string) {
  */
 unsigned int convertRomanLetterToInt(char romanLetter) {
     switch (romanLetter) {
-        case 'M':
+        case THOUSAND:
             return 1000;
-        case 'D':
+        case FIVE_HUNDRED:
             return 500;
-        case 'C':
+        case HUNDRED:
             return 100;
-        case 'L':
+        case FIFTY:
             return 50;
-        case 'X':
+        case TEN:
             return 10;
-        case 'V':
+        case FIVE:
             return 5;
-        case 'I':
+        case ONE:
             return 1;
         default:
             return 0;
@@ -101,18 +102,15 @@ bool areRomanLetters(const string& romanNumber) {
 }
 
 /*
- @brief
- @param[in] int powerOf
- @param[in] long int number
- @return bool
- */
-bool isPower(int powerOf, long int number) {
-    if (powerOf == 1)
-        return (number == 1);
+ @brief This function checks if the input number is a power of ten
 
+ @param[in] long int number     Number to check
+ @return bool                   Return true if the number is a power of ten
+ */
+bool isPowerOfTen(long int number) {
     long int result = 1;
     while (result < number) {
-        result *= powerOf;
+        result *= INT_TEN;
     }
     return (result == number);
 }
@@ -137,8 +135,8 @@ string convertArabicToRoman(string value) {
     for (int i = 0; i <= tenthPower; ++i) {
         switch (digitsNumber) {
             case 4:
-                current = 'e';
-                middle = 'e';
+                current = OUT_OF_RANGE;
+                middle = OUT_OF_RANGE;
                 smaller = THOUSAND;
                 break;
             case 3:
@@ -231,8 +229,8 @@ string convertRomanToArabic(string romanNumber) {
                     carry += currentNumber;
                 }
                 // if the next numbers are in ascending order, we'll substract them
-            } else if (((current == 'I' || current == 'X' || current == 'C') && currentNumber < nextNumber) &&
-                       currentNumber != previousNumber && (!isPower(10, currentNumber) || !isPower(10, nextNumber) || currentNumber * 10 == nextNumber)) {
+            } else if (((current == ONE || current == TEN || current == HUNDRED) && currentNumber < nextNumber) &&
+                       currentNumber != previousNumber && (!isPowerOfTen(currentNumber) || !isPowerOfTen(nextNumber) || currentNumber * 10 == nextNumber)) {
                 resultSub += nextNumber - currentNumber;
 
             } else {

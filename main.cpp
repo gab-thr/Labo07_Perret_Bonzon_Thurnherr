@@ -195,21 +195,27 @@ string convertArabicToRoman(string value) {
 string convertRomanToArabic(string romanNumber) {
     bool invalid = false;
     unsigned int result = 0;
+    char previous = char(0), current = char(0), next = char(0), afterNext = char(0);
+    unsigned int previousNumber = 0, currentNumber = 0, nextNumber = 0, afterNextNumber = 0;
 
     for (unsigned int i = 0; i < romanNumber.length(); i++) {
-        char previous =  i == 0 ? 0 : romanNumber[i - 1];
-        char current =  i == romanNumber.length() - 1 && i != 0 ? 0 : romanNumber[i];
-        char next =  i == romanNumber.length() - 1 ? 0 : romanNumber[i + 1];
-        char afterNext =  i == romanNumber.length() - 1 ? 0 : romanNumber[i + 2];
+        if (((i + 1) < romanNumber.length() || (i + 2) < romanNumber.length()) || i < romanNumber.length()) {
+            current = romanNumber[i];
+            next = romanNumber[i + 1];
+            afterNext = romanNumber[i + 2];
+        }
+        if (i != 0) {
+            previous = romanNumber[i - 1];
+        }
+        if (previous || current || next || afterNext) {
+            previousNumber = convertRomanLetterToInt(previous);
+            currentNumber = convertRomanLetterToInt(current);
+            nextNumber = convertRomanLetterToInt(next);
+            afterNextNumber = convertRomanLetterToInt(afterNext);
+        }
+        unsigned int carry = 0;
         unsigned int resultSub = 0;
         unsigned int resultAdd = 0;
-
-        unsigned int previousNumber = previous == 0 ? 0 : convertRomanLetterToInt(previous);
-        unsigned int currentNumber = current == 0 ? 0 : convertRomanLetterToInt(current);
-        unsigned int nextNumber = next == 0 ? 0 : convertRomanLetterToInt(next);
-        unsigned int afterNextNumber = afterNext == 0 ? 0 : convertRomanLetterToInt(afterNext);
-        unsigned int carry = 0;
-
         // if we're not at the end of the string
         if (nextNumber != 0) {
             // if the next numbers are in descending order, we'll add them
@@ -233,6 +239,7 @@ string convertRomanToArabic(string romanNumber) {
             result += resultSub + resultAdd + carry;
             // if there is only one letter, we don't have to process the above
             // and we can simply call the function for converting letter
+
         } else if (romanNumber.length() == 1) {
             result += convertRomanLetterToInt(current);
         }

@@ -11,6 +11,11 @@
         "${fileBasenameNoExtension}",
         "${file}"
       ],
+      "presentation": {
+        "echo": true,
+        "reveal": "never",
+        "panel": "shared"
+    }
       "group": {
         "kind": "build",
         "isDefault": true

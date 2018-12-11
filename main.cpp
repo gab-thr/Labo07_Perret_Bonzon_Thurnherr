@@ -4,7 +4,6 @@
     Fichier     : main.cpp
     Auteur(s)   : Ludovic Bonzon, Benoit Perret, Gabrielle Thurnherr
     Date        : 28.11.2018
-
     But         : Vous devez écrire un programme convertissant les nombres écrits avec
     le système de numérotation indo-arabe en nombres romains et vice-versa. Il lit les
     entrées ligne par ligne et détecte dans quel sens doit s'effectuer la conversion.
@@ -15,11 +14,9 @@
     romains écrits sans symbole se répétant plus de 3 fois, à l'exception du M. Ainsi 4
     s'écrit IV et pas IIII, 99 s'écrit XCIX et pas LXXXXVIIII. Les nombres romains ne
     respectant pas cette règle doivent être considérés non valides.
-
     Remarque(s) : - Le programme gère l'insertion de chiffres romains en minuscule
                     et en majuscule
-                  - 
-
+                  -
     Compilateur : MinGW-g++ <6.3.0>
     -----------------------------------------------------------------------------------
 */
@@ -36,7 +33,6 @@ const char ZERO = '0';
 
 /**
  @brief Function that puts every character of a string to uppercase
-
  @param[in,out] string& string  String to convert to uppercase
  */
 void strToUpper(string& string) {
@@ -47,7 +43,6 @@ void strToUpper(string& string) {
 
 /**
  @brief Function that converts a roman char to its arabic number equivalent
-
  @param[in] char romanLetter    Letter of the roman numeration system
  @return unsigned int           Value in arabic numbers
  */
@@ -99,7 +94,6 @@ bool areRomanLetters(const string& romanNumber) {
 
 /*
  @brief
-
  @param[in] int powerOf
  @param[in] long int number
  @return bool
@@ -117,7 +111,6 @@ bool isPower(int powerOf, long int number) {
 
 /*
  @brief Function that converts indo-arabic numerals to Roman letters
-
  @param[in] string value    String of numbers to convert
  @return string result      Indo-arabic numeral converted to Roman letters
  */
@@ -188,7 +181,6 @@ string convertArabicToRoman(string value) {
 
 /*
  @brief Function that converts Roman letters to indo-arabic numeral system
-
  @param[in] string romanNumber  String of letters supposedly roman
  @return unsigned int           Roman letter number converted into indo-arabic numeral system
  */
@@ -251,7 +243,6 @@ string convertRomanToArabic(string romanNumber) {
 
 /**
  @brief Function displaying the result of a conversion
-
  @param[in] string result   Value to display (either Roman or arabic numeral)
  */
 void displayStrResult(string result) {
